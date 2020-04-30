@@ -41,8 +41,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var imageSlider = ImageSlider(images: images);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -140,7 +138,7 @@ class HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            imageSlider,
+            ImageSlider(images: images),
             MainMenuList(),
             GrayArea(),
             PromoProduct(),
