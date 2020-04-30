@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
-import 'package:flutter_toped_ui/data/items.dart';
-import 'package:flutter_toped_ui/helper/flucommerce/slider/image_slider.dart';
-import 'package:flutter_toped_ui/widgets/bannerBelanjaUntung.dart';
-import 'package:flutter_toped_ui/widgets/bannerBeliKebutuhan.dart';
-import 'package:flutter_toped_ui/widgets/bannerPromoSpesial.dart';
-import 'package:flutter_toped_ui/widgets/grayArea.dart';
-import 'package:flutter_toped_ui/widgets/kategoriPilihan.dart';
-import 'package:flutter_toped_ui/widgets/mainMenuList.dart';
-import 'package:flutter_toped_ui/widgets/mostTrendingProduct.dart';
-import 'package:flutter_toped_ui/widgets/promoProduct.dart';
-import 'package:flutter_toped_ui/widgets/topupDanTagihan.dart';
+import 'package:flutter_toped_ui/view/tabs/account_tab.dart';
+import 'package:flutter_toped_ui/view/tabs/cart_tab.dart';
+import 'package:flutter_toped_ui/view/tabs/feed_tab.dart';
+import 'package:flutter_toped_ui/view/tabs/home_tab.dart';
+import 'package:flutter_toped_ui/view/tabs/inbox_tab.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +15,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   DateTime time = DateTime.now();
   bool _disposed = false;
+  int selectedPosition = 0;
+  List<Widget> listBottomWidget = new List();
 
   @override
   void initState() {
@@ -31,6 +27,11 @@ class HomePageState extends State<HomePage> {
         });
     });
     super.initState();
+    listBottomWidget.add(HomeTab());
+    listBottomWidget.add(FeedTab());
+    listBottomWidget.add(InboxTab());
+    listBottomWidget.add(CartTab());
+    listBottomWidget.add(AccountTab());
   }
 
   @override
@@ -109,9 +110,16 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      body: Builder(
+        builder: (context) {
+          return listBottomWidget[selectedPosition];
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: 0, // this will be set when a tab is tapped
+        currentIndex: selectedPosition,
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -127,35 +135,18 @@ class HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            title: Text('Keranjang'),
+            title: Text('Cart'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            title: Text('Akun'),
+            title: Text('Account'),
           ),
         ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ImageSlider(images: images),
-            MainMenuList(),
-            GrayArea(),
-            PromoProduct(),
-            GrayArea(),
-            BannerPromoSpecial(),
-            GrayArea(),
-            BannerBelanjaUntung(),
-            GrayArea(),
-            MostTrendingProduct(),
-            GrayArea(),
-            BannerBeliKebutuhan(),
-            GrayArea(),
-            TopUpTagihan(),
-            GrayArea(),
-            KategoriPilihan(),
-          ],
-        ),
+        onTap: (position) {
+          setState(() {
+            selectedPosition = position;
+          });
+        },
       ),
     );
   }
